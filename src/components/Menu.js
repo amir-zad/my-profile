@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { core } from "./material";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { sidebarItems, myInfo } from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Helmet } from "react-helmet";
@@ -27,9 +27,15 @@ const useStyles = makeStyles((theme) =>
 );
 
 const Menu = () => {
+  const location = useLocation();
   const classes = useStyles();
   const history = useHistory();
-  const [selectedItem, setSelectedItem] = useState(sidebarItems[0]);
+
+  useEffect(() => {
+    setSelectedItem(sidebarItems.find((i) => i.path === location.pathname));
+  }, [location]);
+
+  const [selectedItem, setSelectedItem] = useState();
 
   const handleClick = (item) => {
     setSelectedItem(item);
@@ -41,9 +47,11 @@ const Menu = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{`${myInfo.fullName} - ${selectedItem.title}`}</title>
-      </Helmet>
+      {selectedItem && (
+        <Helmet>
+          <title>{`${myInfo.fullName} - ${selectedItem.title}`}</title>
+        </Helmet>
+      )}
       <MenuList>
         {sidebarItems.map((i) => (
           <MenuItem
