@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { core } from "./material";
 import { useHistory } from "react-router-dom";
-import { sidebarItems } from "../config";
+import { sidebarItems, myInfo } from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Helmet } from "react-helmet";
 
 const {
   MenuList,
@@ -28,39 +29,36 @@ const useStyles = makeStyles((theme) =>
 const Menu = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [selectedItemPath, setSelectedItemPath] = useState(
-    sidebarItems[0].path
-  );
+  const [selectedItem, setSelectedItem] = useState(sidebarItems[0]);
 
   const handleClick = (item) => {
-    setSelectedItemPath(item.path);
+    setSelectedItem(item);
     history.push(item.path);
   };
 
+  const getClassName = (item) =>
+    selectedItem === item ? classes.selectedItem : "";
+
   return (
-    <MenuList>
-      {sidebarItems.map((i) => (
-        <MenuItem
-          key={i.path}
-          onClick={() => handleClick(i)}
-          selected={selectedItemPath === i.path}
-        >
-          <ListItemIcon>
-            <FontAwesomeIcon
-              icon={i.icon}
-              className={
-                selectedItemPath === i.path ? classes.selectedItem : ""
-              }
-            />
-          </ListItemIcon>
-          <Typography
-            className={selectedItemPath === i.path ? classes.selectedItem : ""}
+    <>
+      <Helmet>
+        <title>{`${myInfo.fullName} - ${selectedItem.title}`}</title>
+      </Helmet>
+      <MenuList>
+        {sidebarItems.map((i) => (
+          <MenuItem
+            key={i.path}
+            onClick={() => handleClick(i)}
+            selected={selectedItem === i}
           >
-            {i.title}
-          </Typography>
-        </MenuItem>
-      ))}
-    </MenuList>
+            <ListItemIcon>
+              <FontAwesomeIcon icon={i.icon} className={getClassName(i)} />
+            </ListItemIcon>
+            <Typography className={getClassName(i)}>{i.title}</Typography>
+          </MenuItem>
+        ))}
+      </MenuList>
+    </>
   );
 };
 
