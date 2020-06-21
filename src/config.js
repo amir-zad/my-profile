@@ -7,6 +7,7 @@ const {
   faHardHat,
   faRocket,
   faGraduationCap,
+  faPhoneAlt,
 } = FaIcons;
 
 export const sidebarItems = [
@@ -39,6 +40,11 @@ export const sidebarItems = [
     title: "Education",
     path: "/education",
     icon: faGraduationCap,
+  },
+  {
+    title: "Contact",
+    path: "/contact",
+    icon: faPhoneAlt,
   },
 ];
 
